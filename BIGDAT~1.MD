@@ -350,12 +350,22 @@ spark.jars					/usr/share/java/mysql-connector-java-8.0.26.jar
 `pyspark`
 
 ```python
+#pyspark에서 sql db,table 만들기
+import mysql.connector
+
+db_connection = mysql.connector.connect(user="me", password="me")
+db_cursor = db_connection.cursor()
+db_cursor.execute("CREATE DATABASE TestDB;")
+db_cursor.execute("USE TestDB;")
+db_cursor.execute("CREATE TABLE test(컬럼명 형식,컬럼명 형식);")
+
 # root 계정의 mysql database에 있는 test table 사용
 user="root"
 password="1234"
-url="jdbc:mysql://localhost:3306/mysql"
+url="jdbc:mysql://localhost:3306/TestDB"
 driver="com.mysql.cj.jdbc.Driver"
-dbtable="test2"
+dbtable="test"
+
 
 test_df = spark.read.format("jdbc").option("user", user).option("password", password).option("url", url).option("driver", driver).option("dbtable", dbtable).load()
 # test_df = spark.read.format("jdbc").options(user=user, password=password, url=url, driver=driver, dbtable=dbtable).load()
@@ -374,8 +384,7 @@ overwrite: Overwrite existing data. (drop -> create)
 ignore: Silently ignore this operation if data already exists.	(db throw)
 error (default case): Throw an exception if data already exists. (pyspark throw)
 '''
-data/yong_file_/official_price.csv
-spark.table("b").write.jdbc(url,"asdf",connectionProperties)
+
 ```
 
 
